@@ -1,0 +1,154 @@
+
+Aim : To implement insertion, deletion, search, and traversal operations in a Binary Search Tree using C.
+    
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define structure for a node
+struct Node {
+    int data;
+    struct Node* left;
+    struct Node* right;
+};
+
+// Function to create a new node
+struct Node* createNode(int value) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->left = newNode->right = NULL;
+    return newNode;
+}
+
+// Insert into BST
+struct Node* insert(struct Node* root, int value) {
+    if (root == NULL) {
+        return createNode(value);
+    }
+    if (value < root->data) {
+        root->left = insert(root->left, value);
+    } else if (value > root->data) {
+        root->right = insert(root->right, value);
+    }
+    return root; // unchanged root
+}
+
+// Inorder Traversal (sorted order)
+void inorder(struct Node* root) {
+    if (root != NULL) {
+        inorder(root->left);
+        printf("%d ", root->data);
+        inorder(root->right);
+    }
+}
+
+// Preorder Traversal
+void preorder(struct Node* root) {
+    if (root != NULL) {
+        printf("%d ", root->data);
+        preorder(root->left);
+        preorder(root->right);
+    }
+}
+
+// Postorder Traversal
+void postorder(struct Node* root) {
+    if (root != NULL) {
+        postorder(root->left);
+        postorder(root->right);
+        printf("%d ", root->data);
+    }
+}
+
+// Search a value in BST
+struct Node* search(struct Node* root, int key) {
+    if (root == NULL || root->data == key)
+        return root;
+    if (key < root->data)
+        return search(root->left, key);
+    return search(root->right, key);
+}
+
+// Find minimum node (used in delete)
+struct Node* findMin(struct Node* root) {
+    while (root && root->left != NULL)
+        root = root->left;
+    return root;
+}
+
+// Delete a node
+struct Node* deleteNode(struct Node* root, int key) {
+    if (root == NULL) return root;
+
+    if (key < root->data) {
+        root->left = deleteNode(root->left, key);
+    } else if (key > root->data) {
+        root->right = deleteNode(root->right, key);
+    } else {
+        // Case 1 & 2: node with only one child or no child
+        if (root->left == NULL) {
+            struct Node* temp = root->right;
+            free(root);
+            return temp;
+        } else if (root->right == NULL) {
+            struct Node* temp = root->left;
+            free(root);
+            return temp;
+        }
+
+        // Case 3: node with two children
+        struct Node* temp = findMin(root->right);
+        root->data = temp->data;
+        root->right = deleteNode(root->right, temp->data);
+    }
+    return root;
+}
+
+int main() {
+    struct Node* root = NULL;
+
+    // Insert elements
+    int values[] = {50, 30, 20, 40, 70, 60, 80};
+    int n = sizeof(values) / sizeof(values[0]);
+    for (int i = 0; i < n; i++) {
+        root = insert(root, values[i]);
+    }
+
+    printf("Inorder traversal: ");
+    inorder(root);
+    printf("\n");
+
+    printf("Preorder traversal: ");
+    preorder(root);
+    printf("\n");
+
+    printf("Postorder traversal: ");
+    postorder(root);
+    printf("\n");
+
+    // Search
+    int key = 40;
+    struct Node* found = search(root, key);
+    if (found != NULL)
+        printf("Element %d found in BST.\n", key);
+    else
+        printf("Element %d not found in BST.\n", key);
+
+    // Delete
+    root = deleteNode(root, 20);
+    printf("Inorder after deleting 20: ");
+    inorder(root);
+    printf("\n");
+
+    root = deleteNode(root, 30);
+    printf("Inorder after deleting 30: ");
+    inorder(root);
+    printf("\n");
+
+    root = deleteNode(root, 50);
+    printf("Inorder after deleting 50: ");
+    inorder(root);
+    printf("\n");
+
+    return 0;
+}
+ 

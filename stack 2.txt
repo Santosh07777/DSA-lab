@@ -1,0 +1,96 @@
+
+AIM :  To write a program to simulate stack operations and validate the concept of sequential data storage.
+
+#include <iostream>
+using namespace std;
+
+#define MAX 5   // maximum size of stack
+
+class Stack {
+    int arr[MAX];
+    int top;
+
+public:
+    // Constructor
+    Stack() {
+        top = -1;
+    }
+
+    // Push operation
+    void push(int x) {
+        if (top == MAX - 1) {
+            cout << "Stack Overflow! Cannot push " << x << endl;
+        } else {
+            arr[++top] = x;
+            cout << x << " pushed into stack." << endl;
+        }
+    }
+
+    // Pop operation
+    void pop() {
+        if (top == -1) {
+            cout << "Stack Underflow! No element to pop." << endl;
+        } else {
+            cout << arr[top--] << " popped from stack." << endl;
+        }
+    }
+
+    // Peek (top element)
+    void peek() {
+        if (top == -1) {
+            cout << "Stack is empty." << endl;
+        } else {
+            cout << "Top element is: " << arr[top] << endl;
+        }
+    }
+
+    // Display all elements
+    void display() {
+        if (top == -1) {
+            cout << "Stack is empty." << endl;
+        } else {
+            cout << "Stack elements (top to bottom): ";
+            for (int i = top; i >= 0; i--) {
+                cout << arr[i] << " ";
+            }
+            cout << endl;
+        }
+    }
+};
+
+// Driver Code
+int main() {
+    Stack s;
+    int choice, value;
+
+    cout << "---- Stack ADT Implementation ----" << endl;
+    do {
+        cout << "\n1. Push\n2. Pop\n3. Peek\n4. Display\n5. Exit" << endl;
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            cout << "Enter value to push: ";
+            cin >> value;
+            s.push(value);
+            break;
+        case 2:
+            s.pop();
+            break;
+        case 3:
+            s.peek();
+            break;
+        case 4:
+            s.display();
+            break;
+        case 5:
+            cout << "Exiting program." << endl;
+            break;
+        default:
+            cout << "Invalid choice! Try again." << endl;
+        }
+    } while (choice != 5);
+
+    return 0;
+} 

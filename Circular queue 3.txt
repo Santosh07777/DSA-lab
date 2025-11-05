@@ -1,0 +1,102 @@
+
+Aim : To implement a Circular Queue using arrays in C with operations enqueue , dequeue , display and peek . 
+
+#include <stdio.h>
+#include <stdlib.h>
+#define SIZE 5   // Size of the Circular Queue
+
+int cqueue[SIZE];
+int front = -1, rear = -1;
+
+// Function to check if queue is full
+int isFull() {
+    if ((front == 0 && rear == SIZE - 1) || (front == rear + 1))
+        return 1;
+    return 0;
+}
+
+// Function to check if queue is empty
+int isEmpty() {
+    if (front == -1)
+        return 1;
+    return 0;
+}
+
+// Function to insert an element in the queue
+void enqueue(int value) {
+    if (isFull()) {
+        printf("Queue Overflow! Cannot insert %d\n", value);
+        return;
+    }
+    if (front == -1) // First element
+        front = 0;
+    rear = (rear + 1) % SIZE;
+    cqueue[rear] = value;
+    printf("Inserted %d\n", value);
+}
+
+// Function to delete an element from the queue
+void dequeue() {
+    if (isEmpty()) {
+        printf("Queue Underflow! Cannot delete\n");
+        return;
+    }
+    int deleted = cqueue[front];
+    if (front == rear) { // Only one element
+        front = -1;
+        rear = -1;
+    } else {
+        front = (front + 1) % SIZE;
+    }
+    printf("Deleted %d\n", deleted);
+}
+
+// Function to display elements of the queue
+void display() {
+    if (isEmpty()) {
+        printf("Queue is empty\n");
+        return;
+    }
+    printf("Queue elements: ");
+    int i = front;
+    while (1) {
+        printf("%d ", cqueue[i]);
+        if (i == rear)
+            break;
+        i = (i + 1) % SIZE;
+    }
+    printf("\n");
+}
+
+// Function to peek at the front element
+void peek() {
+    if (isEmpty()) {
+        printf("Queue is empty\n");
+    } else {
+        printf("Front element is %d\n", cqueue[front]);
+    }
+}
+
+int main() {
+    // Demonstration of circular queue
+    enqueue(10);
+    enqueue(20);
+    enqueue(30);
+    enqueue(40);
+    enqueue(50);
+    display();
+
+    dequeue();
+    dequeue();
+    display();
+
+    enqueue(60);
+    enqueue(70);
+    display();
+
+    peek();
+
+    return 0;
+}
+ 
+
